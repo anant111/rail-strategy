@@ -1,0 +1,415 @@
+import { useState } from "react";
+
+const railPlan = [
+  {
+    position: 1,
+    name: "What's Your Soul Seeking?",
+    status: "lock",
+    score: 31.96,
+    ctr: "10.54%",
+    action: "Keep as-is. Highest score, highest CTR. Do not change.",
+    courses: [],
+    oneOnOne: [],
+    badge: "🔒 Locked",
+  },
+  {
+    position: 2,
+    name: "Group 1A",
+    status: "lock",
+    score: 29.44,
+    ctr: "10.04%",
+    action: "Keep as-is.",
+    courses: [],
+    oneOnOne: [],
+    badge: "🔒 Locked",
+  },
+  {
+    position: 3,
+    name: "Group 2A",
+    status: "lock",
+    score: 26.96,
+    ctr: "9.01%",
+    action: "Keep as-is.",
+    courses: [],
+    oneOnOne: [],
+    badge: "🔒 Locked",
+  },
+  {
+    position: 4,
+    name: "Manifest Wealth & Abundance",
+    status: "rebuild",
+    score: 6.56,
+    ctr: "1.53%",
+    action: "Rebuild rail content. Current CTR is only 1.53% despite a strong theme. These 3 courses have proven demand — load them in immediately.",
+    courses: [
+      { slug: "manifest-like-a-millionaire-attract-wealth-with-crystals-energy-numbers-and-visualisation", label: "Manifest Like a Millionaire", score: 43.51, ctr: "9.24%", cr: "2.46%", tag: "⭐ #1 Course" },
+      { slug: "magnetise-money-and-claim-abundance", label: "Magnetise Money & Claim Abundance", score: 12.77, ctr: "5.00%", cr: "2.00%", tag: "Top 19" },
+      { slug: "change-your-money-energy-change-your-life", label: "Change Your Money Energy", score: 13.59, ctr: "4.77%", cr: "1.04%", tag: "Top 15" },
+    ],
+    oneOnOne: [],
+    badge: "🔧 Rebuild Content",
+  },
+  {
+    position: 5,
+    name: "Personal Sessions — Tarot & Guidance",
+    status: "new",
+    score: null,
+    ctr: "—",
+    action: "New rail to create. Your 1-on-1 tarot/guidance sessions have CTR 10–13% — higher than most existing rails. They currently have no dedicated rail on the homepage.",
+    courses: [],
+    oneOnOne: [
+      { slug: "psychic-tarot-card-reading-with-naina-goyal", label: "Psychic Tarot with Naina", ctr: "13.10%", cr: "2.07%", tag: "Highest CTR" },
+      { slug: "tarot-card-reading-with-poonam-dhandania", label: "Tarot Reading with Poonam", ctr: "11.41%", cr: "2.18%", tag: "Top 1-on-1" },
+      { slug: "angel-guidance-with-shaili-netarwala", label: "Angel Guidance with Shaili", ctr: "10.76%", cr: "2.44%", tag: "High CR" },
+      { slug: "akashic-records-readings-with-binita-rege", label: "Akashic Records with Binita", ctr: "8.40%", cr: "1.40%", tag: "" },
+    ],
+    badge: "🆕 New Rail",
+  },
+  {
+    position: 6,
+    name: "Complimentary Sessions For You",
+    status: "keep",
+    score: 17.04,
+    ctr: "5.28%",
+    action: "Keep. Score 17 and CTR 5.28% are solid. Remove Complimentary B (CTR 0.39%) fully — it is dragging engagement down.",
+    courses: [],
+    oneOnOne: [],
+    badge: "✅ Keep (Drop Version B)",
+  },
+  {
+    position: 7,
+    name: "Karmic Healing & Relationships",
+    status: "rebuild",
+    score: null,
+    ctr: "—",
+    action: "Merge 'Guidance for Every Journey' and scattered karmic content into one focused rail. Bundle courses + the 1-on-1 for a mixed format rail.",
+    courses: [
+      { slug: "all-about-karmic-relationships", label: "All About Karmic Relationships", score: 12.74, ctr: "5.85%", cr: "1.72%", tag: "Top 20" },
+      { slug: "karma-cords-and-cleansing-ritual", label: "Karma Cords & Cleansing Ritual", score: 9.43, ctr: "5.72%", cr: "0.87%", tag: "Top 25" },
+    ],
+    oneOnOne: [
+      { slug: "karmic-clarity-with-muskan-maini", label: "Karmic Clarity with Muskan", ctr: "7.24%", cr: "4.61%", tag: "Highest 1-on-1 CR" },
+    ],
+    badge: "🔧 Merge & Rebuild",
+  },
+  {
+    position: 8,
+    name: "Sleep & Stress Relief",
+    status: "new",
+    score: null,
+    ctr: "—",
+    action: "New rail. 'reduce-stress-and-anxiety' is your #1 tag by score (29). These breathwork sessions directly serve it but are currently unhoused.",
+    courses: [
+      { slug: "breathe-into-deep-sleep-restorative-breathwork", label: "Breathe Into Deep Sleep", score: 13.38, ctr: "2.68%", cr: "1.79%", tag: "Top 16" },
+      { slug: "anxiety-relief-through-breathwork", label: "Anxiety Relief Through Breathwork", score: 5.42, ctr: "5.33%", cr: "0.67%", tag: "" },
+    ],
+    oneOnOne: [],
+    badge: "🆕 New Rail",
+  },
+  {
+    position: 9,
+    name: "Guided Practices for Growth",
+    status: "keep",
+    score: 10.79,
+    ctr: "1.71%",
+    action: "Keep rail but inject top-performing content. Current CTR of 1.71% needs to reach 3%+.",
+    courses: [
+      { slug: "unlock-motivation-with-hypnotherapy", label: "Unlock Motivation with Hypnotherapy", score: 12.46, ctr: "5.69%", cr: "2.14%", tag: "Top 21" },
+      { slug: "heal-your-past-to-create-a-better-present", label: "Heal Your Past", score: 9.34, ctr: "3.31%", cr: "1.32%", tag: "Top 27" },
+    ],
+    oneOnOne: [],
+    badge: "✅ Inject Content",
+  },
+  {
+    position: 10,
+    name: "Spiritual Practices & Devotion",
+    status: "new",
+    score: null,
+    ctr: "—",
+    action: "New rail. Kirtan + Sadhana content has 2,721–1,949 page views, proving a large devotional audience. They need a dedicated home.",
+    courses: [
+      { slug: "immersive-kirtan-a-soulful-saturday-evening", label: "Immersive Kirtan", score: 17.57, ctr: "2.94%", cr: "0.59%", tag: "2721 PVs" },
+      { slug: "hanuman-sadhana-and-naamjap-with-vidhi", label: "Hanuman Sadhana & Naamjap", score: 15.97, ctr: "8.31%", cr: "1.52%", tag: "Top 11" },
+      { slug: "krishna-kirtan-sadhana-devotion-chanting-and-inner-surrender", label: "Krishna Kirtan Sadhana", score: 6.38, ctr: "4.19%", cr: "0.52%", tag: "" },
+    ],
+    oneOnOne: [],
+    badge: "🆕 New Rail",
+  },
+  {
+    position: 11,
+    name: "Sessions With Top Experts",
+    status: "keep",
+    score: 10.68,
+    ctr: "1.32%",
+    action: "Keep but refresh the expert lineup with your highest 1-on-1 CTR performers.",
+    courses: [],
+    oneOnOne: [
+      { slug: "automatic-writing-with-smita-jayakar", label: "Automatic Writing with Smita", ctr: "8.70%", cr: "2.90%", tag: "High CTR" },
+      { slug: "telepathic-animal-communication-with-kajal-lunkad", label: "Animal Communication with Kajal", ctr: "8.34%", cr: "1.78%", tag: "" },
+    ],
+    badge: "✅ Refresh Experts",
+  },
+  {
+    position: 12,
+    name: "Anti-Aging & Holistic Health",
+    status: "rebuild",
+    score: 6.10,
+    ctr: "0.47%",
+    action: "Replace 'Holistic Health and Healing' (CTR 0.47%) with a more focused version led by the Age Well workshop — Score 13.24 with CTR 6.75%.",
+    courses: [
+      { slug: "age-well-anti-aging-and-skin-reset-workshop", label: "Age Well — Anti-Aging & Skin Reset", score: 13.24, ctr: "6.75%", cr: "2.32%", tag: "Top 17" },
+    ],
+    oneOnOne: [],
+    badge: "🔧 Replace Rail",
+  },
+];
+
+const statusColors = {
+  lock:    { bg: "#052e16", border: "#16a34a", text: "#4ade80" },
+  keep:    { bg: "#1e1b4b", border: "#4f46e5", text: "#818cf8" },
+  rebuild: { bg: "#1c1400", border: "#d97706", text: "#fbbf24" },
+  new:     { bg: "#0f172a", border: "#7c3aed", text: "#a78bfa" },
+};
+
+const weekPlan = [
+  {
+    week: "Week 1",
+    focus: "Fix Position 4 & Create Tarot Rail",
+    tasks: [
+      "Rebuild 'Manifest Wealth' (pos 4) — swap in manifest-like-a-millionaire, magnetise-money, change-money-energy",
+      "Create new 'Personal Sessions — Tarot & Guidance' rail at position 5",
+      "Remove 'Complimentary Sessions B' (CTR 0.39%) entirely",
+    ],
+    expected: "Pos 4 CTR should jump from 1.53% → ~5%+. New tarot rail expected 8–11% CTR from day 1 based on session-level data.",
+    color: "#4ade80",
+  },
+  {
+    week: "Week 2",
+    focus: "Karmic Rail Merge + Sleep Rail Launch",
+    tasks: [
+      "Merge karmic sessions into one 'Karmic Healing & Relationships' rail at pos 7",
+      "Launch 'Sleep & Stress Relief' rail at pos 8 with breathwork sessions",
+      "If tarot rail CTR > 10% after 7 days, consider promoting it to position 4",
+    ],
+    expected: "Karmic rail CTR target: 5–6%. Sleep rail may start slow (2–3%) but serves your #1 tag.",
+    color: "#818cf8",
+  },
+  {
+    week: "Week 3",
+    focus: "Devotion Rail + Expert & Growth Refresh",
+    tasks: [
+      "Launch 'Spiritual Practices & Devotion' rail at pos 10 (Kirtan + Sadhana)",
+      "Inject Hypnotherapy & Heal Your Past into 'Guided Practices for Growth' to push CTR above 3%",
+      "Swap expert lineup in 'Sessions With Top Experts' to Smita + Kajal",
+    ],
+    expected: "Devotion rail target 4–5% CTR. Growth rail should cross 3% with content injection.",
+    color: "#fbbf24",
+  },
+  {
+    week: "Week 4",
+    focus: "Review, Stabilise & Plan Next Cycle",
+    tasks: [
+      "Any rail still below 2% CTR after 3 weeks → A/B test the title copy first, then replace if no improvement",
+      "Promote best performer from pos 8–12 up one slot if its score exceeds 15",
+      "Document learnings and build next month's content hypothesis based on CR data",
+    ],
+    expected: "Overall homepage CTR should be 1.5–2.5pts higher vs your baseline from Week 1.",
+    color: "#f97316",
+  },
+];
+
+const insights = [
+  {
+    title: "🚨 Biggest Missed Opportunity",
+    color: "#f87171", bg: "#3b0a0a", border: "#dc2626",
+    body: "'manifest-like-a-millionaire' is your #1 course — Score 43.51, CTR 9.24% — but it lives in a rail with only 1.53% CTR. The course is performing despite the rail, not because of it. Fixing this one rail is the highest-ROI move you can make.",
+  },
+  {
+    title: "🎯 Untapped 1-on-1 CTR",
+    color: "#a78bfa", bg: "#1a0533", border: "#7c3aed",
+    body: "Tarot and guidance 1-on-1 sessions have 10–13% CTR — higher than most rails — yet there is no dedicated 1-on-1 rail on the homepage. This is leaving your highest-intent traffic completely unserved.",
+  },
+  {
+    title: "📊 Karmic Content Is Fragmented",
+    color: "#fbbf24", bg: "#1c1400", border: "#d97706",
+    body: "Karmic content is scattered across 3 rails. Consolidating karma-cords, karmic-relationships, and karmic-clarity 1-on-1 into one rail will boost signal strength and lift collective CTR.",
+  },
+  {
+    title: "💤 Top Tag Has No Rail",
+    color: "#60a5fa", bg: "#0c1a2e", border: "#2563eb",
+    body: "'reduce-stress-and-anxiety' is your #1 tag by score (29) but there is no sleep/stress rail. Both breathwork sessions for this theme are currently unhoused. This is a clear gap.",
+  },
+  {
+    title: "🕉️ Devotional Audience Is Large & Homeless",
+    color: "#4ade80", bg: "#052e16", border: "#16a34a",
+    body: "Immersive Kirtan has 2,721 page views — highest PV after the top course. Hanuman Sadhana has 8.31% CTR. This devotional audience exists and engages, they just have no dedicated rail to land on.",
+  },
+  {
+    title: "📱 iOS vs Android Gap to Monitor",
+    color: "#f97316", bg: "#1a0a00", border: "#ea580c",
+    body: "Most rails skew Android-heavy in CTR. When building new rails, test different card images per platform — iOS and Android users respond to different visual styles. Split by platform in your weekly data pull.",
+  },
+];
+
+export default function RailStrategy() {
+  const [activeTab, setActiveTab] = useState("map");
+  const [expanded, setExpanded] = useState(null);
+
+  const tabs = [
+    { id: "map", label: "Session → Rail Map" },
+    { id: "fourweek", label: "4-Week Plan" },
+    { id: "gaps", label: "Key Insights" },
+  ];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif", background: "#09090b", minHeight: "100vh", color: "#e4e4e7" }}>
+      <div style={{ background: "linear-gradient(135deg, #18181b 0%, #1c1917 100%)", borderBottom: "1px solid #27272a", padding: "28px 32px 0" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <p style={{ color: "#71717a", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>Homepage Optimization · Courses + 1-on-1 Data</p>
+          <h1 style={{ fontSize: 26, fontWeight: 700, color: "#fafafa", marginBottom: 4 }}>Rail ↔ Session Strategy</h1>
+          <p style={{ color: "#a1a1aa", fontSize: 14, marginBottom: 24 }}>Top courses + 1-on-1s mapped to the right rails — with a 4-week rollout plan</p>
+          <div style={{ display: "flex", gap: 4 }}>
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+                padding: "10px 18px",
+                background: activeTab === t.id ? "#fafafa" : "transparent",
+                color: activeTab === t.id ? "#09090b" : "#71717a",
+                border: "none", borderRadius: "8px 8px 0 0",
+                cursor: "pointer", fontSize: 13,
+                fontWeight: activeTab === t.id ? 600 : 400,
+              }}>{t.label}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 32px" }}>
+
+        {activeTab === "map" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ display: "flex", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+              {Object.entries({ lock: "🔒 Locked", keep: "✅ Keep/Inject", rebuild: "🔧 Rebuild/Merge", new: "🆕 New Rail" }).map(([k, v]) => {
+                const c = statusColors[k];
+                return <span key={k} style={{ fontSize: 11, background: c.bg, border: `1px solid ${c.border}`, color: c.text, borderRadius: 6, padding: "3px 10px" }}>{v}</span>;
+              })}
+            </div>
+
+            {railPlan.map((rail, i) => {
+              const c = statusColors[rail.status];
+              const isOpen = expanded === i;
+              const hasSessions = rail.courses.length > 0 || rail.oneOnOne.length > 0;
+              return (
+                <div key={i} style={{ background: "#18181b", border: `1px solid ${isOpen ? c.border : "#27272a"}`, borderRadius: 12, overflow: "hidden" }}>
+                  <div onClick={() => setExpanded(isOpen ? null : i)} style={{ padding: "16px 20px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}>
+                    <div style={{ minWidth: 32, height: 32, borderRadius: 8, background: c.bg, border: `1px solid ${c.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: c.text }}>{rail.position}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, color: "#fafafa", fontSize: 14 }}>{rail.name}</div>
+                      <div style={{ fontSize: 11, color: "#71717a", marginTop: 2 }}>{rail.action.substring(0, 85)}…</div>
+                    </div>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0 }}>
+                      {rail.score && <span style={{ fontSize: 11, color: "#a1a1aa" }}>Score {rail.score}</span>}
+                      {rail.ctr !== "—" && <span style={{ fontSize: 11, color: parseFloat(rail.ctr) > 5 ? "#4ade80" : parseFloat(rail.ctr) > 2 ? "#fbbf24" : "#f87171" }}>CTR {rail.ctr}</span>}
+                      <span style={{ fontSize: 11, fontWeight: 600, background: c.bg, color: c.text, border: `1px solid ${c.border}`, padding: "2px 8px", borderRadius: 5 }}>{rail.badge}</span>
+                      {hasSessions && <span style={{ color: "#52525b", fontSize: 14 }}>{isOpen ? "▲" : "▼"}</span>}
+                    </div>
+                  </div>
+
+                  {isOpen && (
+                    <div style={{ padding: "0 20px 18px", borderTop: "1px solid #27272a" }}>
+                      <div style={{ background: "#09090b", borderRadius: 8, padding: "12px 14px", margin: "14px 0", fontSize: 12, color: "#a1a1aa", lineHeight: 1.7 }}>
+                        <span style={{ color: c.text, fontWeight: 600 }}>Action: </span>{rail.action}
+                      </div>
+
+                      {rail.courses.length > 0 && (
+                        <div style={{ marginBottom: 10 }}>
+                          <div style={{ fontSize: 11, color: "#71717a", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>📚 Courses to Feature</div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                            {rail.courses.map((c2, j) => (
+                              <div key={j} style={{ background: "#0f172a", border: "1px solid #1e3a5f", borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ fontSize: 13, color: "#e4e4e7", fontWeight: 500 }}>{c2.label}</div>
+                                  <div style={{ fontSize: 11, color: "#475569", marginTop: 2, fontFamily: "monospace" }}>{c2.slug}</div>
+                                </div>
+                                <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                                  {c2.tag && <span style={{ fontSize: 10, background: "#1e3a5f", color: "#60a5fa", border: "1px solid #2563eb55", padding: "2px 7px", borderRadius: 4 }}>{c2.tag}</span>}
+                                  <span style={{ fontSize: 11, color: "#94a3b8" }}>CTR {c2.ctr}</span>
+                                  <span style={{ fontSize: 11, color: "#94a3b8" }}>CR {c2.cr}</span>
+                                  {c2.score && <span style={{ fontSize: 11, color: "#60a5fa", fontWeight: 600 }}>Score {c2.score}</span>}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {rail.oneOnOne.length > 0 && (
+                        <div>
+                          <div style={{ fontSize: 11, color: "#71717a", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>🧑‍💼 1-on-1 Sessions to Feature</div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                            {rail.oneOnOne.map((s, j) => (
+                              <div key={j} style={{ background: "#170f1f", border: "1px solid #3b1f5e", borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ fontSize: 13, color: "#e4e4e7", fontWeight: 500 }}>{s.label}</div>
+                                  <div style={{ fontSize: 11, color: "#475569", marginTop: 2, fontFamily: "monospace" }}>{s.slug}</div>
+                                </div>
+                                <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                                  {s.tag && <span style={{ fontSize: 10, background: "#2e1065", color: "#c084fc", border: "1px solid #7c3aed55", padding: "2px 7px", borderRadius: 4 }}>{s.tag}</span>}
+                                  <span style={{ fontSize: 11, color: "#94a3b8" }}>CTR {s.ctr}</span>
+                                  <span style={{ fontSize: 11, color: "#94a3b8" }}>CR {s.cr}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {activeTab === "fourweek" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {weekPlan.map((w, i) => (
+              <div key={i} style={{ background: "#18181b", border: "1px solid #27272a", borderLeft: `3px solid ${w.color}`, borderRadius: 12, padding: "20px 24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                  <div style={{ background: `${w.color}22`, border: `1px solid ${w.color}44`, color: w.color, fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>{w.week}</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: "#fafafa" }}>{w.focus}</div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 20 }}>
+                  <div>
+                    <div style={{ fontSize: 11, color: "#71717a", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 10 }}>Tasks</div>
+                    {w.tasks.map((t, j) => (
+                      <div key={j} style={{ display: "flex", gap: 10, marginBottom: 8, alignItems: "flex-start" }}>
+                        <div style={{ minWidth: 20, height: 20, borderRadius: "50%", background: `${w.color}22`, border: `1px solid ${w.color}44`, color: w.color, fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1, flexShrink: 0 }}>{j + 1}</div>
+                        <div style={{ fontSize: 13, color: "#d4d4d8", lineHeight: 1.6 }}>{t}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ background: "#09090b", border: "1px solid #27272a", borderRadius: 8, padding: "14px 16px", alignSelf: "flex-start" }}>
+                    <div style={{ fontSize: 11, color: "#71717a", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Expected Result</div>
+                    <div style={{ fontSize: 12, color: "#a1a1aa", lineHeight: 1.7 }}>{w.expected}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "gaps" && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            {insights.map((card, i) => (
+              <div key={i} style={{ background: card.bg, border: `1px solid ${card.border}`, borderRadius: 12, padding: "20px 22px" }}>
+                <h4 style={{ fontSize: 14, fontWeight: 600, color: card.color, marginBottom: 10 }}>{card.title}</h4>
+                <p style={{ fontSize: 13, color: "#a1a1aa", lineHeight: 1.7, margin: 0 }}>{card.body}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
